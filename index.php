@@ -1,7 +1,11 @@
 <?php 
 header('Content-Type: text/csv');
 header('Content-Disposition: attachment; filename="sitemap.csv"');
-$locations = ["/bib/1", "/bib/2", "/bib/3", "/bib/4", "/bib/5"];
+//$locations = ["/bib/1", "/bib/2", "/bib/3", "/bib/4", "/bib/5"];
+$locations = array();
+for ($i = 1; $i <= 1000000; $i++) {
+    $locations[] = "/bib/" . $i;
+}
 $id = 1;
 $type ="custom";
 $subtype ="";
@@ -24,6 +28,7 @@ foreach($locations as $location){
 }
 
 $fp = fopen('php://output', 'w');
+fputcsv($fp, explode(",", "id,type,subtype,location,language,access,status,status_override,lastmod,priority,priority_override,changefreq,changecount"));
 foreach ( $sravan as $line ) {
     $val = explode(",", $line);
     fputcsv($fp, $val);
