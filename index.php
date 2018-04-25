@@ -19,7 +19,7 @@ $priority_override = 0;
 $changefreq = "86400";
 $changecount = 0;
 $sravan = array();
-foreach($locations as $location){
+foreach ($locations as $location) {
     $lastmod = time();
     $sravan[] = $id . "," . $type . "," . $subtype . "," . $location . "," . $language 
     . "," . $access . "," . $status . "," . $status_override . "," . $lastmod . "," 
