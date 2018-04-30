@@ -11,3 +11,4 @@
     $result = $connection->query("LOAD DATA INFILE '" . $uploadfile . "' INTO TABLE `xmlsitemap` FIELDS TERMINATED BY ',' (id,type,subtype,location,language,access,status,status_override,lastmod,priority,priority_override,changefreq,changecount)");
     $result->execute();
   }
+  
