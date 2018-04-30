@@ -1,36 +1,20 @@
 <?php 
-header('Content-Type: text/csv');
-header('Content-Disposition: attachment; filename="sitemap.csv"');
-//$locations = ["/bib/1", "/bib/2", "/bib/3", "/bib/4", "/bib/5"];
-$locations = array();
-for ($i = 1; $i <= 100; $i++) {
-    $locations[] = "/bib/" . $i;
-}
-$id = 1;
-$type ="custom";
-$subtype ="";
-$language = "en";
-$access = 1;
-$status = 1;
-$status_override = 0;
-$lastmod = time(); 
-$priority = "0.5";
-$priority_override = 0;
-$changefreq = "86400";
-$changecount = 0;
-$sravan = array();
-foreach ($locations as $location) {
-    $lastmod = time();
-    $sravan[] = $id . "," . $type . "," . $subtype . "," . $location . "," . $language 
-    . "," . $access . "," . $status . "," . $status_override . "," . $lastmod . "," 
-    . $priority . "," . $priority_override . "," . $changefreq . "," . $changecount;
-    $id += 1;
-}
+require 'drupal_function.php';
+// CREATE TABLE `xmlsitemap` ( `id` varchar(32) NOT NULL DEFAULT '' COMMENT 'Primary key with type. a unique id for the item.', `type` varchar(32) NOT NULL DEFAULT '' COMMENT 'Primary key with id. the type of item (e.g. node, user, etc.).', `subtype` varchar(128) NOT NULL DEFAULT '' COMMENT 'A sub-type identifier for the link (node type, menu name, term VID, etc.).', `loc` varchar(255) NOT NULL DEFAULT '' COMMENT 'The URL to the item relative to the Drupal path.', `language` varchar(12) NOT NULL DEFAULT '' COMMENT 'The languages.language of this link or an empty string if it is language-neutral.', `access` tinyint(4) NOT NULL DEFAULT '1' COMMENT 'A boolean that represents if the item is viewable by the anonymous user. This field is useful to store the result of node_access() so we can retain changefreq and priority_override information.', `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT 'An integer that represents if the item is included in the sitemap.', `status_override` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'A boolean that if TRUE means that the status field has been overridden from its default value.', `lastmod` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'The UNIX timestamp of last modification of the item.', `priority` float DEFAULT NULL COMMENT 'The priority of this URL relative to other URLs on your site. Valid values range from 0.0 to 1.0.', `priority_override` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'A boolean that if TRUE means that the priority field has been overridden from its default value.', `changefreq` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'The average time in seconds between changes of this item.', `changecount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'The number of times this item has been changed. Used to help calculate the next changefreq value.', PRIMARY KEY (`id`,`type`,`language`), KEY `loc` (`loc`(191)), KEY `access_status_loc` (`access`,`status`,`loc`(191)), KEY `type_subtype` (`type`,`subtype`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='The base table for xmlsitemap links.' ;
 
-$fp = fopen('php://output', 'w');
-fputcsv($fp, explode(",", "id,type,subtype,location,language,access,status,status_override,lastmod,priority,priority_override,changefreq,changecount"));
-foreach ( $sravan as $line ) {
-    $val = explode(",", $line);
-    fputcsv($fp, $val);
-}
-fclose($fp);
+$host = '127.0.0.1';
+$db   = 'kushal';
+$user = 'root';
+$pass = '';
+$charset = 'utf8mb4';
+
+$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+$opt = [
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    PDO::ATTR_EMULATE_PREPARES   => false,
+];
+$pdo = new PDO($dsn, $user, $pass, $opt);
+$location = "C://xampp//htdocs//csv//sitemap.csv";
+writeCSV();
+// updateCSV($pdo, $location);
