@@ -5,7 +5,8 @@
  * please don't run this script 
  */
 
-function writeCSV() {
+function writeCSV() 
+{
     header('Content-Type: text/csv');
     header('Content-Disposition: attachment; filename="sitemap.csv"');
     //$locations = ["/bib/1", "/bib/2", "/bib/3", "/bib/4", "/bib/5"];
@@ -43,7 +44,8 @@ function writeCSV() {
     fclose($fp);
 }
 
-function updateCSV($pdo, $uploadfile) {
+function updateCSV($pdo, $uploadfile) 
+{
     echo "Hello, world!";
     // LOAD DATA LOCAL INFILE '/home/kus/src/php/csv/sitemap.csv' INTO TABLE studentdb.xmlsitemap FIELDS TERMINATED BY ',' ignore 1 lines;
     $result = $pdo->query("LOAD DATA INFILE '" . $uploadfile . "' INTO TABLE `xmlsitemap` FIELDS TERMINATED BY ',' ignore 1 lines");
