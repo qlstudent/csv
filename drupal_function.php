@@ -48,8 +48,7 @@ function updateCSV($pdo, $uploadfile)
 {
     echo "Hello, world!";
     // LOAD DATA LOCAL INFILE '/home/kus/src/php/csv/sitemap.csv' INTO TABLE studentdb.xmlsitemap FIELDS TERMINATED BY ',' ignore 1 lines;
-    $result = $pdo->query("LOAD DATA INFILE '" . $uploadfile . "' INTO TABLE `xmlsitemap` FIELDS TERMINATED BY ',' ignore 1 lines");
+    $statement = $pdo->exec("LOAD DATA LOCAL INFILE '" . $uploadfile . "' INTO TABLE `xmlsitemap` FIELDS TERMINATED BY ',' ignore 1 lines");
     echo "query done";
-    $result->execute();
-    $result->closeCursor();
+    // `$result->closeCursor();
 }
