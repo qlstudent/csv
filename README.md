@@ -38,3 +38,92 @@ Query OK, 1000000 rows affected (25.57 sec)
 Records: 1000000  Deleted: 0  Skipped: 0  Warnings: 0
 
 ```
+
+attempt with one million rows 
+
+```bash
+Last login: Wed May  2 20:18:40 on ttys000
+You have new mail.
+minint-tg9n4hv:~ student$ cd ~/src/csv/
+minint-tg9n4hv:csv student$ git pull origin master
+remote: Counting objects: 4, done.
+remote: Compressing objects: 100% (2/2), done.
+remote: Total 4 (delta 2), reused 4 (delta 2), pack-reused 0
+Unpacking objects: 100% (4/4), done.
+From github.com:qlstudent/csv
+ * branch            master     -> FETCH_HEAD
+   0d28d60..ec030e9  master     -> origin/master
+Updating 0d28d60..ec030e9
+Fast-forward
+ drupal_function.php | 5 ++---
+ index.php           | 1 +
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+minint-tg9n4hv:csv student$ opendb
+mkdir: /usr/local/etc/my.cnf.d: File exists
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 8
+Server version: 10.2.14-MariaDB Homebrew
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Reading history-file /Users/student/.mysql_history
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> use studentdb;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+MariaDB [studentdb]> show tables;
+--------------
+show tables
+--------------
+
++---------------------+
+| Tables_in_studentdb |
++---------------------+
+| xmlsitemap          |
++---------------------+
+1 row in set (0.00 sec)
+
+MariaDB [studentdb]> select count(*) from studentdb.xmlsitemap;
+--------------
+select count(*) from studentdb.xmlsitemap
+--------------
+
++----------+
+| count(*) |
++----------+
+|        0 |
++----------+
+1 row in set (0.00 sec)
+
+MariaDB [studentdb]> select count(*) from studentdb.xmlsitemap;
+--------------
+select count(*) from studentdb.xmlsitemap
+--------------
+
++----------+
+| count(*) |
++----------+
+|      100 |
++----------+
+1 row in set (0.00 sec)
+
+MariaDB [studentdb]> select count(*) from studentdb.xmlsitemap;
+--------------
+select count(*) from studentdb.xmlsitemap
+--------------
+
++----------+
+| count(*) |
++----------+
+|  1000000 |
++----------+
+1 row in set (0.23 sec)
+
+MariaDB [studentdb]> \q
+Writing history-file /Users/student/.mysql_history
+Bye
+minint-tg9n4hv:csv student$
+```
