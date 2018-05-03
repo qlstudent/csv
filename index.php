@@ -40,6 +40,6 @@ $opt = [
     PDO::MYSQL_ATTR_LOCAL_INFILE => true,
 ];
 $pdo = new PDO($dsn, $user, $pass, $opt);
-$location = "/home/kus/src/php/csv/sitemap.csv";
+$location = "/Users/student/src/csv/sitemap.csv";
 // writeCSV();
 updateCSV($pdo, $location);
