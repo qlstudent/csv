@@ -11,10 +11,12 @@ function writeCSV()
     header('Content-Disposition: attachment; filename="sitemap.csv"');
     //$locations = ["/bib/1", "/bib/2", "/bib/3", "/bib/4", "/bib/5"];
     $locations = array();
-    for ($i = 1; $i <= 100; $i++) {
+    $starting = 10001;
+    $ending = 15000;
+    for ($i = $starting; $i <= $ending; $i++) {
         $locations[] = "/bib/" . $i;
     }
-    $id = 1;
+    $id = $starting;
     $type ="custom";
     $subtype ="";
     $language = "en";
@@ -47,6 +49,8 @@ function writeCSV()
 function updateCSV($pdo, $uploadfile) 
 {
     echo "Hello, world!";
+    $delete_statement = "delete from xmlsitemap where type = 'custom'";
+    $pdo->exec($delete_statement);
     // LOAD DATA LOCAL INFILE '/home/kus/src/php/csv/sitemap.csv' INTO TABLE studentdb.xmlsitemap FIELDS TERMINATED BY ',' ignore 1 lines;
     $statement = "LOAD DATA LOCAL INFILE '" . $uploadfile . "' INTO TABLE `xmlsitemap` FIELDS TERMINATED BY ',' ignore 1 lines";
     $statement = $pdo->exec($statement);

@@ -27,9 +27,9 @@ require 'drupal_function.php';
 // 13 rows in set (0.00 sec)
 
 $host = '127.0.0.1';
-$db   = 'studentdb';
-$user = 'student';
-$pass = 'goodpassword';
+$db   = 'mylocaldb';
+$user = 'root';
+$pass = 'root';
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;";
@@ -41,5 +41,5 @@ $opt = [
 ];
 $pdo = new PDO($dsn, $user, $pass, $opt);
 $location = "/Users/student/src/csv/sitemap.csv";
-// writeCSV();
-updateCSV($pdo, $location);
+writeCSV();
+// updateCSV($pdo, $location);
