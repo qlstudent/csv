@@ -80,7 +80,9 @@ class MyCSV
         foreach ($locations as $key=>$location) {
             $language = MyCSV::getIso6391from6392($languages[$key]);
             $lastmod = $dates[$key]; 
-            $stmt = $pdo->prepare("INSERT INTO XMLSITEMAP (`id`, `type`, `subtype`, `loc`, `language`, `access`, `status`, `status_override`, `lastmod`, `priority`, `priority_override`, `changefreq`, `changecount`) VALUES (:id, :type, :subtype, :loc, :language, :access, :status, :status_override, :lastmod, :priority, :priority_override, :changefreq, :changecount)");
+            $stmt = $pdo->prepare(
+                "INSERT INTO XMLSITEMAP (`id`, `type`, `subtype`, `loc`, `language`, `access`, `status`, `status_override`, `lastmod`, `priority`, `priority_override`, `changefreq`, `changecount`) VALUES (:id, :type, :subtype, :loc, :language, :access, :status, :status_override, :lastmod, :priority, :priority_override, :changefreq, :changecount)"
+            );
             $stmt->bindParam(':id', $id);
             $stmt->bindParam(':type', $type);
             $stmt->bindParam(':subtype', $subtype);
@@ -138,7 +140,15 @@ class MyCSV
         }
 
         $fp = fopen('php://output', 'w');
-        fputcsv($fp, explode(",", "id,type,subtype,location,language,access,status,status_override,lastmod,priority,priority_override,changefreq,changecount"));
+        $columns = "id,type,subtype,location,language,access,status,status_override,"
+        . "lastmod,priority,priority_override,changefreq,changecount";
+        fputcsv(
+            $fp, 
+            explode(
+                ",", 
+                $columns
+            )
+        );
         foreach ( $sravan as $line ) {
             $val = explode(",", $line);
             fputcsv($fp, $val);
@@ -146,16 +156,16 @@ class MyCSV
         fclose($fp);
     }
 
-    function updateCSV($pdo, $uploadfile) 
-    {
-        echo "Hello, world!";
-        $delete_statement = "delete from xmlsitemap where type = 'custom'";
-        $pdo->exec($delete_statement);
-        // LOAD DATA LOCAL INFILE '/home/kus/src/php/csv/sitemap.csv' INTO TABLE studentdb.xmlsitemap FIELDS TERMINATED BY ',' ignore 1 lines;
-        $statement = "LOAD DATA LOCAL INFILE '" . $uploadfile . "' INTO TABLE `xmlsitemap` FIELDS TERMINATED BY ',' ignore 1 lines";
-        $statement = $pdo->exec($statement);
-        echo "query done";
-    }
+    // function updateCSV($pdo, $uploadfile) 
+    // {
+    //     echo "Hello, world!";
+    //     $delete_statement = "delete from xmlsitemap where type = 'custom'";
+    //     $pdo->exec($delete_statement);
+    //     // LOAD DATA LOCAL INFILE '/home/kus/src/php/csv/sitemap.csv' INTO TABLE studentdb.xmlsitemap FIELDS TERMINATED BY ',' ignore 1 lines;
+    //     $statement = "LOAD DATA LOCAL INFILE '" . $uploadfile . "' INTO TABLE `xmlsitemap` FIELDS TERMINATED BY ',' ignore 1 lines";
+    //     $statement = $pdo->exec($statement);
+    //     echo "query done";
+    // }
 
     /** 
      * Get UNIX timestamp from input time
@@ -469,14 +479,31 @@ class MyCSV
             "yor" => "yo",
             "zha" => "za",
             "chi" => "zh",
-            "zul" => "zu"
+            "zul" => "zu",
+            // // undecided 
+            // "und" => "und",
+            // // No linguistic content; Not applicable 
+            // "zxx" => "und",
+            // // not applicable 
+            // "N/A" => "und",
+            // // Middle English (1100–1500)
+            // "enm" => "en",
+            // // Ancient Greek (to 1453)
+            // "grc" => "el", 
+            // // Central American Indian languages
+            // "cai" => "und",
+            // // multiple 
+            // "mul" => "und",
+            // // Old English (ca. 450–1100)
+            // "ang" => "en",
+            // // Dakota 
+            // "dak" => "und"
         ];
-        $result = $languageCodes[$key];
-        if (is_null($result)) {
-            var_dump($key);
-            die();
+        if (isset($languageCodes[$key])) {
+            return $languageCodes[$key];
+        } else { 
+            return "und";
         }
-        return $result;
     }
 
 }
