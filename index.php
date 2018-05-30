@@ -45,7 +45,9 @@ $pdo = new PDO($dsn, $user, $pass, $opt);
 // updateCSV($pdo, $location);
 // BibID_lang_lastModDate_05_29_18a.csv
 // var_dump(MyCSV::getUnixTimestamp("08/28/2014"));
-$input = MyCSV::readInputFile("input.csv");
-// $input = MyCSV::readInputFile("/Users/student/src/csv/BibID_lang_lastModDate_05_29_18a.csv");
-MyCSV::writeToDatabase($input[0], $input[1], $input[2], $pdo);
+// $input = MyCSV::readInputFile("input.csv");
+$input1 = MyCSV::readInputFile("/Users/student/src/csv/BibID_lang_lastModDate_05_29_18a.csv");
+MyCSV::writeToDatabase($input1[0], $input1[1], $input1[2], $pdo, false);
+$input2 = MyCSV::readInputFile("/Users/student/src/csv/BibID_lang_lastModDate_05_29_18a.csv");
+MyCSV::writeToDatabase($input2[0], $input2[1], $input2[2], $pdo, false);
 // var_dump(MyCSV::getIso6391from6392("eng"));

@@ -49,7 +49,7 @@ class MyCSV
      * 
      * @return void return nothing 
      */
-    static function writeToDatabase($locations, $languages, $dates, $pdo) 
+    static function writeToDatabase($locations, $languages, $dates, $pdo, $willDelete) 
     {
         foreach ($locations as &$location) {
             $location = "/bib/" . $location;
@@ -63,10 +63,20 @@ class MyCSV
         $priority_override = 0;
         $changefreq = "86400";
         $changecount = 0;
-        $sravan = array();
-        $delete_statement = "delete from xmlsitemap where type = 'custom'";
-        $pdo->exec($delete_statement);
-        $id = 1;
+        if ($willDelete) {
+            $deleteStatement = "delete from xmlsitemap where type = 'custom'";
+            $pdo->exec($deleteStatement);
+        }
+        $selectMaxId = "select max(id) as count from mylocaldb.xmlsitemap where type = 'custom'";
+        $selectMaxId = $pdo->prepare($selectMaxId);
+        $selectMaxId->execute();
+        $countArray = $selectMaxId -> fetch(PDO::FETCH_ASSOC);
+        $count = $countArray['count'];
+        if (is_null($count)) { 
+            $id = 1;
+        } else { 
+            $id = $count;
+        }
         foreach ($locations as $key=>$location) {
             $language = MyCSV::getIso6391from6392($languages[$key]);
             $lastmod = $dates[$key]; 
@@ -243,6 +253,16 @@ class MyCSV
         return $guidv4;
     }
 
+    /**
+     * Returns an ISO 639-1 language code given an ISO 639-2 language code
+     *
+     * This list is incomplete. 
+     * You can help by expanding it. 
+     *
+     * @param string $key the key is a string like "en"  
+     * 
+     * @return string
+     */
     static function getIso6391from6392($key)
     {
         $languageCodes = [
@@ -451,7 +471,11 @@ class MyCSV
             "chi" => "zh",
             "zul" => "zu"
         ];
-        return $languageCodes[$key];
+        $result = $languageCodes[$key];
+        if (is_null($result)) {
+            var_dump($key);
+            die();
+        }
     }
 
 }
