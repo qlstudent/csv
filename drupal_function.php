@@ -174,7 +174,7 @@ class MyCSV
      * 
      * @return int returns UNIX time stamp
      */
-    static function getUnixTimestamp($stringDate): int
+    static function getUnixTimestamp($stringDate)
     {    
         return strtotime($stringDate);
     }
