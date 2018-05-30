@@ -14,7 +14,7 @@
  * @author     Original Author <author@example.com>
  * @author     Another Author <another@example.com>
  * @copyright  2018 Queens Library
- * @license    http://www.queenslibrary.org  Proprietary?
+ * @license    http://www.queenslibrary.org  
  * @version    GIT: $Id$
  * @link       https://www.drupal.org/project/xmlsitemap
  * @see        XMLSitemap
@@ -30,7 +30,7 @@
  * @author     Original Author <author@example.com>
  * @author     Another Author <another@example.com>
  * @copyright  2018 Queens Library
- * @license    http://www.queenslibrary.org  Proprietary?
+ * @license    http://www.queenslibrary.org  
  * @version    Release: @0.0.0@
  * @link       https://www.drupal.org/project/xmlsitemap
  * @see        DaVinci, Net_Sample::Net_Sample()
