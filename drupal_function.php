@@ -67,7 +67,7 @@ class MyCSV
             $deleteStatement = "delete from xmlsitemap where type = 'custom'";
             $pdo->exec($deleteStatement);
         }
-        $selectMaxId = "select max(id) as count from mylocaldb.xmlsitemap where type = 'custom'";
+        $selectMaxId = "select max(id) as count from xmlsitemap where type = 'custom'";
         $selectMaxId = $pdo->prepare($selectMaxId);
         $selectMaxId->execute();
         $countArray = $selectMaxId -> fetch(PDO::FETCH_ASSOC);
