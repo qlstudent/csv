@@ -68,7 +68,7 @@ class MyCSV
         $pdo->exec($delete_statement);
         $id = 1;
         foreach ($locations as $key=>$location) {
-            $language = $languages[$key];
+            $language = MyCSV::getIso6391from6392($languages[$key]);
             $lastmod = $dates[$key]; 
             $stmt = $pdo->prepare("INSERT INTO XMLSITEMAP (`id`, `type`, `subtype`, `loc`, `language`, `access`, `status`, `status_override`, `lastmod`, `priority`, `priority_override`, `changefreq`, `changecount`) VALUES (:id, :type, :subtype, :loc, :language, :access, :status, :status_override, :lastmod, :priority, :priority_override, :changefreq, :changecount)");
             $stmt->bindParam(':id', $id);
@@ -118,7 +118,7 @@ class MyCSV
         $changecount = 0;
         $sravan = array();
         foreach ($locations as $key=>$location) {
-            $language = $languages[$key];
+            $language = getIso6391from6392($languages[$key]);
             $lastmod = $dates[$key]; 
             $randomID = MyCSV::getRandomID();
             $sravan[] =  $randomID . "," . $type . "," . $subtype . "," . $location 
