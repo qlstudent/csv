@@ -476,6 +476,7 @@ class MyCSV
             var_dump($key);
             die();
         }
+        return $result;
     }
 
 }
