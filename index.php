@@ -40,8 +40,12 @@ $opt = [
     PDO::MYSQL_ATTR_LOCAL_INFILE => true,
 ];
 $pdo = new PDO($dsn, $user, $pass, $opt);
-$location = "/Users/student/src/csv/sitemap.csv";
+// $location = "/Users/student/src/csv/sitemap.csv";
 // writeCSV();
 // updateCSV($pdo, $location);
-var_dump(getUnixTimestamp("08/28/2014"));
-var_dump(readInputFile("input.csv"));
+// BibID_lang_lastModDate_05_29_18a.csv
+// var_dump(MyCSV::getUnixTimestamp("08/28/2014"));
+// $input = MyCSV::readInputFile("input.csv");
+// $input = MyCSV::readInputFile("/Users/student/src/csv/BibID_lang_lastModDate_05_29_18a.csv");
+// MyCSV::writeToDatabase($input[0], $input[1], $input[2], $pdo);
+var_dump(MyCSV::getIso6391from6392("eng"));
