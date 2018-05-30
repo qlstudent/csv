@@ -56,3 +56,31 @@ function updateCSV($pdo, $uploadfile)
     $statement = $pdo->exec($statement);
     echo "query done";
 }
+
+function getUnixTimestamp($stringDate): int
+{    
+    return strtotime($stringDate);
+}
+
+function readInputFile($inputFileName) 
+{
+    $row = 1;
+    $locations = array();
+    if (($handle = fopen($inputFileName, "r")) !== false) {
+        // ignore the first line 
+        $data = fgetcsv($handle, 0, ",");
+        while (($data = fgetcsv($handle, 0, ",")) !== false) {
+            $num = count($data);
+            // echo "<p> $num fields in line $row: <br /></p>\n";
+            for ($c=0; $c < $num; $c++) {
+                // echo $data[$c] . "<br />\n";
+                if ($c == 0) {
+                    array_push($locations, $data[$c]);
+                }
+            }
+            $row++;
+        }
+        fclose($handle);
+    }
+    return $locations;
+}

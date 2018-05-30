@@ -41,5 +41,7 @@ $opt = [
 ];
 $pdo = new PDO($dsn, $user, $pass, $opt);
 $location = "/Users/student/src/csv/sitemap.csv";
-writeCSV();
+// writeCSV();
 // updateCSV($pdo, $location);
+var_dump(getUnixTimestamp("08/28/2014"));
+var_dump(readInputFile("/Users/student/src/csv/BibID_lang_lastModDate_05_29_18b.csv"));
