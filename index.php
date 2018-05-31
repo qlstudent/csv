@@ -109,8 +109,8 @@ $time = microtime(true); // time in Microseconds
 // BibID_lang_lastModDate_05_29_18a.csv
 // var_dump(MyCSV::getUnixTimestamp("08/28/2014"));
 // $input = MyCSV::readInputFile("input.csv");
-// $input1 = MyCSV::readInputFile("large.csv");
-$input1 = MyCSV::readInputFile("BibID_lang_lastModDate_05_29_18a.csv");
+$input1 = MyCSV::readInputFile("large.csv");
+// $input1 = MyCSV::readInputFile("BibID_lang_lastModDate_05_29_18a.csv");
 MyCSV::writeToDatabase($input1[0], $input1[1], $input1[2], $pdo, true);
 // $input2 = MyCSV::readInputFile("/Users/student/src/csv/BibID_lang_lastModDate_05_29_18a.csv");
 // MyCSV::writeToDatabase($input2[0], $input2[1], $input2[2], $pdo, false);

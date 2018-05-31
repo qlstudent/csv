@@ -192,11 +192,11 @@ class MyCSV
         $locations = array();
         $languages = array();
         $dates = array();
-        $maxCSV = 600000;
+        $maxCSV = 800001;
         if (($handle = fopen($inputFileName, "r")) !== false) {
             $fp = file($inputFileName, FILE_SKIP_EMPTY_LINES);
-            if ($fp > $maxCSV) {
-                echo "This load is too big for me";
+            if (count($fp) > $maxCSV) {
+                echo "This load of {count($fp)} is too big for me";
                 die();
             }
             // ignore the first line 
