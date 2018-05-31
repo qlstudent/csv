@@ -192,11 +192,16 @@ class MyCSV
         $locations = array();
         $languages = array();
         $dates = array();
+        $maxCSV = 800000;
         if (($handle = fopen($inputFileName, "r")) !== false) {
             // ignore the first line 
             $data = fgetcsv($handle, 0, ",");
             while (($data = fgetcsv($handle, 0, ",")) !== false) {
                 $num = count($data);
+                if ($num > $maxCSV) {
+                    echo "This load is too big for me";
+                    die();
+                }
                 // echo "<p> $num fields in line $row: <br /></p>\n";
                 for ($c=0; $c < $num; $c++) {
                     // echo $data[$c] . "<br />\n";
