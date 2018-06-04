@@ -117,4 +117,4 @@ $input2 = MyCSV::readInputFile("/Users/student/src/csv/BibID_lang_lastModDate_05
 // MyCSV::writeToDatabase($input2[0], $input2[1], $input2[2], $pdo, false);
 MyCSV::writeCSV($input2[0], $input2[1], $input2[2]);
 // var_dump(MyCSV::getIso6391from6392("eng"));
-echo (microtime(true) - $time) . ' elapsed';
+// echo (microtime(true) - $time) . ' elapsed';
