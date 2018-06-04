@@ -130,7 +130,7 @@ class MyCSV
         $changecount = 0;
         $sravan = array();
         foreach ($locations as $key=>$location) {
-            $language = getIso6391from6392($languages[$key]);
+            $language = MyCSV::getIso6391from6392($languages[$key]);
             $lastmod = $dates[$key]; 
             $randomID = MyCSV::getRandomID();
             $sravan[] =  $randomID . "," . $type . "," . $subtype . "," . $location 
@@ -195,10 +195,10 @@ class MyCSV
         $maxCSV = 800001;
         if (($handle = fopen($inputFileName, "r")) !== false) {
             $fp = file($inputFileName, FILE_SKIP_EMPTY_LINES);
-            if (count($fp) > $maxCSV) {
-                echo "This load of {count($fp)} is too big for me";
-                die();
-            }
+            // if (count($fp) > $maxCSV) {
+            //     echo "This load of {count($fp)} is too big for me";
+            //     die();
+            // }
             // ignore the first line 
             $data = fgetcsv($handle, 0, ",");
             while (($data = fgetcsv($handle, 0, ",")) !== false) {
