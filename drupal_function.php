@@ -115,7 +115,7 @@ class MyCSV
         header('Content-Type: text/csv');
         header('Content-Disposition: attachment; filename="sitemap.csv"');
         foreach ($locations as &$location) {
-            $location = "bib/" . $location;
+            $location = "/bib/" . $location;
         }
         $type = "custom";
         $subtype = "";
