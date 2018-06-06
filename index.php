@@ -88,33 +88,19 @@ require 'drupal_function.php';
 // +-------------------+------------------+------+-----+---------+-------+
 // 13 rows in set (0.00 sec)
 
-$host = '127.0.0.1';
-$db   = 'mylocaldb';
-$user = 'root';
-$pass = 'root';
-$charset = 'utf8mb4';
+// $host = '127.0.0.1';
+// $db   = 'mylocaldb';
+// $user = 'root';
+// $pass = 'root';
+// $charset = 'utf8mb4';
 
-$dsn = "mysql:host=$host;dbname=$db;";
-$opt = [
-    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES   => false,
-    PDO::MYSQL_ATTR_LOCAL_INFILE => true,
-];
-$pdo = new PDO($dsn, $user, $pass, $opt);
-$time = microtime(true); // time in Microseconds
-// $location = "/Users/student/src/csv/sitemap.csv";
-// writeCSV();
-// updateCSV($pdo, $location);
-// BibID_lang_lastModDate_05_29_18a.csv
-// var_dump(MyCSV::getUnixTimestamp("08/28/2014"));
-// $input = MyCSV::readInputFile("input.csv");
-// $input1 = MyCSV::readInputFile("large.csv");
-// $input1 = MyCSV::readInputFile("BibID_lang_lastModDate_05_29_18a.csv");
-// MyCSV::writeToDatabase($input1[0], $input1[1], $input1[2], $pdo, true);
-// MyCSV::writeCSV($input1[0], $input1[1], $input1[2]);
-$input2 = MyCSV::readInputFile("/Users/student/src/csv/BibID_lang_lastModDate_05_29_18b.csv");
-// MyCSV::writeToDatabase($input2[0], $input2[1], $input2[2], $pdo, false);
-MyCSV::writeCSV($input2[0], $input2[1], $input2[2]);
-// var_dump(MyCSV::getIso6391from6392("eng"));
-// echo (microtime(true) - $time) . ' elapsed';
+// $dsn = "mysql:host=$host;dbname=$db;";
+// $opt = [
+//     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+//     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+//     PDO::ATTR_EMULATE_PREPARES   => false,
+//     PDO::MYSQL_ATTR_LOCAL_INFILE => true,
+// ];
+// $pdo = new PDO($dsn, $user, $pass, $opt);
+$input = MyCSV::readInputFile("input.csv");
+MyCSV::writeCSV($input[0], $input[1], $input[2]);
