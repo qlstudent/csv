@@ -102,5 +102,5 @@ require 'drupal_function.php';
 //     PDO::MYSQL_ATTR_LOCAL_INFILE => true,
 // ];
 // $pdo = new PDO($dsn, $user, $pass, $opt);
-$input = MyCSV::readInputFile("input.csv");
+$input = MyCSV::readInputFile("smallinput.csv");
 MyCSV::writeCSV($input[0], $input[1], $input[2]);
