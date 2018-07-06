@@ -47,18 +47,17 @@ class MyCSV
     {
         $baseUrl = "https://dev.qbpl.org";
         $extension = "/bib/";
-        $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"/>');
         $priority = "0.5";
         $size = 100;
-        for ($counter = 0; $counter < count($locations) % $size; $counter++) {
-            for ($i = 0; $i < count($locations); $i++) {
-                if ($i % $size == 0) {
-                    $counter++;
+        for ($counter = 0; $counter < ceil(count($locations) / $size); $counter++) {
+            $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"/>');
+            for ($i = 0; $i < $size; $i++) {
+                if ($i + $counter * $size > count($locations) - 1) {
+                    break;
                 }
-                $lastmod = $dates[$i];
                 $url = $xml->addChild('url');
-                $url->addChild('loc', $baseUrl . $extension . (string)$locations[$i]);
-                $url->addChild('lastmod', date('Y-m-dTh:m', $lastmod));
+                $url->addChild('loc', $baseUrl . $extension . (string)$locations[$i + $counter * $size]);
+                $url->addChild('lastmod', date('Y-m-dTh:m', $dates[$i + $counter * $size]));
                 $url->addChild('changefreq', "weekly");
                 $url->addChild('priority', $counter);
             }
@@ -70,6 +69,7 @@ class MyCSV
             //Save XML to file - remove this and following line if save not desired
             $dom->save('fileName' . $counter . '.xml');
         }
+        var_dump($counter);
     }
 
     /**
