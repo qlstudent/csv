@@ -45,7 +45,7 @@ class MyCSV
      */
     static function writeXMLSitemap($locations, $dates)
     {
-        $baseUrl = "https://dev.qbpl.org";
+        $baseUrl = "https://www.queenslibrary.org";
         $extension = "/bib/";
         $priority = "0.5";
         $size = 50000;
