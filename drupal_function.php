@@ -49,7 +49,7 @@ class MyCSV
             $lastmod = $dates[$key];
             $url = $xml->addChild('url');
             $url->addChild('loc', $baseUrl . $extension . (string)$location);
-            $url->addChild('lastmod', $lastmod);
+            $url->addChild('lastmod', date('Y-m-dTh:m', $lastmod));
             $url->addChild('changefreq', "weekly");
             $url->addChild('priority', "1.0");
         }
