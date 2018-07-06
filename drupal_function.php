@@ -39,7 +39,7 @@
  */
 class MyCSV
 {
-    static function doIt($locations, $languages, $dates)
+    static function writeXMLSitemap($locations, $dates)
     {
         $baseUrl = "https://dev.qbpl.org";
         $extension = "/bib/";

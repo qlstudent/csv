@@ -25,4 +25,4 @@ require 'drupal_function.php';
 
 $input = MyCSV::readInputFile("smallinput.csv");
 //$input = MyCSV::readInputFile("tinyinput.csv");
-MyCSV::doIt($input[0], $input[1], $input[2]);
+MyCSV::writeXMLSitemap($input[0], $input[2]);
