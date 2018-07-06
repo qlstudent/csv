@@ -29,9 +29,10 @@ $input = MyCSV::readInputFile("tinyinput.csv");
 $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"/>');
 
 for ($i = 1; $i <= 3; ++$i) {
-    $track = $xml->addChild('track');
-    $track->addChild('path', "song$i.mp3");
-    $track->addChild('title', "Track $i - Track Title");
+    $url = $xml->addChild('url');
+    $url->addChild('loc', "song$i.mp3");
+    $url->addChild('changefreq', "weekly");
+    $url->addChild('priority', "1.0");
 }
 
 //Format XML to save indented tree rather than one line
