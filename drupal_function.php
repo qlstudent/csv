@@ -59,7 +59,7 @@ class MyCSV
                 $url->addChild('loc', $baseUrl . $extension . (string)$locations[$i + $counter * $size]);
                 $url->addChild('lastmod', date('Y-m-dTh:m', $dates[$i + $counter * $size]));
                 $url->addChild('changefreq', "weekly");
-                $url->addChild('priority', $counter);
+                $url->addChild('priority', $priority);
             }
             //Format XML to save indented tree rather than one line
             $dom = new DOMDocument($priority);
@@ -67,7 +67,7 @@ class MyCSV
             $dom->formatOutput = true;
             $dom->loadXML($xml->asXML());
             //Save XML to file - remove this and following line if save not desired
-            $dom->save('fileName' . $counter . '.xml');
+            $dom->save('bibliographysitemap' . $counter . '.xml');
         }
         var_dump($counter);
     }
