@@ -48,7 +48,7 @@ class MyCSV
         $baseUrl = "https://dev.qbpl.org";
         $extension = "/bib/";
         $priority = "0.5";
-        $size = 1000;
+        $size = 50000;
         for ($counter = 0; $counter < ceil(count($locations) / $size); $counter++) {
             $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"/>');
             for ($i = 0; $i < $size; $i++) {
