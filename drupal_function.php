@@ -49,23 +49,29 @@ class MyCSV
         $extension = "/bib/";
         $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"/>');
         $priority = "0.5";
-        foreach ($locations as $key => $location) {
-            $lastmod = $dates[$key];
-            $url = $xml->addChild('url');
-            $url->addChild('loc', $baseUrl . $extension . (string)$location);
-            $url->addChild('lastmod', date('Y-m-dTh:m', $lastmod));
-            $url->addChild('changefreq', "weekly");
-            $url->addChild('priority', "1.0");
+        $size = 100;
+        for ($counter = 0; $counter < count($locations) % $size; $counter++) {
+            for ($i = 0; $i < count($locations); $i++) {
+                if ($i % $size == 0) {
+                    $counter++;
+                }
+                $lastmod = $dates[$i];
+                $url = $xml->addChild('url');
+                $url->addChild('loc', $baseUrl . $extension . (string)$locations[$i]);
+                $url->addChild('lastmod', date('Y-m-dTh:m', $lastmod));
+                $url->addChild('changefreq', "weekly");
+                $url->addChild('priority', $counter);
+            }
+            //Format XML to save indented tree rather than one line
+            $dom = new DOMDocument($priority);
+            $dom->preserveWhiteSpace = false;
+            $dom->formatOutput = true;
+            $dom->loadXML($xml->asXML());
+            //Echo XML - remove this and following line if echo not desired
+            echo $dom->saveXML();
+            //Save XML to file - remove this and following line if save not desired
+            $dom->save('fileName' . $counter . '.xml');
         }
-        //Format XML to save indented tree rather than one line
-        $dom = new DOMDocument($priority);
-        $dom->preserveWhiteSpace = false;
-        $dom->formatOutput = true;
-        $dom->loadXML($xml->asXML());
-        //Echo XML - remove this and following line if echo not desired
-        echo $dom->saveXML();
-        //Save XML to file - remove this and following line if save not desired
-        $dom->save('fileName.xml');
     }
 
     /**
@@ -123,16 +129,16 @@ class MyCSV
         fclose($fp);
     }
 
-    // function updateCSV($pdo, $uploadfile) 
-    // {
-    //     echo "Hello, world!";
-    //     $delete_statement = "delete from xmlsitemap where type = 'custom'";
-    //     $pdo->exec($delete_statement);
-    //     // LOAD DATA LOCAL INFILE '/home/kus/src/php/csv/sitemap.csv' INTO TABLE studentdb.xmlsitemap FIELDS TERMINATED BY ',' ignore 1 lines;
-    //     $statement = "LOAD DATA LOCAL INFILE '" . $uploadfile . "' INTO TABLE `xmlsitemap` FIELDS TERMINATED BY ',' ignore 1 lines";
-    //     $statement = $pdo->exec($statement);
-    //     echo "query done";
-    // }
+// function updateCSV($pdo, $uploadfile)
+// {
+//     echo "Hello, world!";
+//     $delete_statement = "delete from xmlsitemap where type = 'custom'";
+//     $pdo->exec($delete_statement);
+//     // LOAD DATA LOCAL INFILE '/home/kus/src/php/csv/sitemap.csv' INTO TABLE studentdb.xmlsitemap FIELDS TERMINATED BY ',' ignore 1 lines;
+//     $statement = "LOAD DATA LOCAL INFILE '" . $uploadfile . "' INTO TABLE `xmlsitemap` FIELDS TERMINATED BY ',' ignore 1 lines";
+//     $statement = $pdo->exec($statement);
+//     echo "query done";
+// }
 
     /**
      * Get UNIX timestamp from input time
@@ -165,7 +171,7 @@ class MyCSV
             //     echo "This load of {count($fp)} is too big for me";
             //     die();
             // }
-            // ignore the first line 
+            // ignore the first line
             fgetcsv($handle, 0, ",");
             while (($data = fgetcsv($handle, 0, ",")) !== false) {
                 $num = count($data);
@@ -454,23 +460,23 @@ class MyCSV
             //     "zha" => "za",
             //     "chi" => "zh",
             //     "zul" => "zu",
-            // // undecided 
+            // // undecided
             // "und" => "und",
-            // // No linguistic content; Not applicable 
+            // // No linguistic content; Not applicable
             // "zxx" => "und",
-            // // not applicable 
+            // // not applicable
             // "N/A" => "und",
             // // Middle English (1100–1500)
             // "enm" => "en",
             // // Ancient Greek (to 1453)
-            // "grc" => "el", 
+            // "grc" => "el",
             // // Central American Indian languages
             // "cai" => "und",
-            // // multiple 
+            // // multiple
             // "mul" => "und",
             // // Old English (ca. 450–1100)
             // "ang" => "en",
-            // // Dakota 
+            // // Dakota
             // "dak" => "und"
         ];
         if (isset($languageCodes[$key])) {
