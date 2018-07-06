@@ -48,7 +48,7 @@ class MyCSV
         $baseUrl = "https://dev.qbpl.org";
         $extension = "/bib/";
         $priority = "0.5";
-        $size = 100;
+        $size = 1000;
         for ($counter = 0; $counter < ceil(count($locations) / $size); $counter++) {
             $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"/>');
             for ($i = 0; $i < $size; $i++) {
@@ -69,7 +69,7 @@ class MyCSV
             //Save XML to file - remove this and following line if save not desired
             $dom->save('bibliographysitemap' . $counter . '.xml');
         }
-        var_dump($counter);
+        self::writeXMLSitemapIndex($baseUrl, $counter);
     }
 
     /**
@@ -482,6 +482,27 @@ class MyCSV
         } else {
             return "und";
         }
+    }
+
+    /**
+     * @param $baseUrl string this is the base url of the website
+     * @param $counter this is the number of sitemaps we assume we follow the same convention
+     */
+    static function writeXMLSitemapIndex($baseUrl, $counter)
+    {
+        $siteMapIndex = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"/>');
+        for($i = 0; $i < $counter; $i++) {
+            $siteMapIndexElement = $siteMapIndex->addChild('sitemap');
+            $siteMapIndexElement->addChild('loc', $baseUrl .'bibliographysitemap' . $i . '.xml');
+            $siteMapIndexElement->addChild('lastmod', date('Y-m-dTh:m', time()));
+        }
+        //Format XML to save indented tree rather than one line
+        $dom = new DOMDocument();
+        $dom->preserveWhiteSpace = false;
+        $dom->formatOutput = true;
+        $dom->loadXML($siteMapIndex->asXML());
+        //Save XML to file - remove this and following line if save not desired
+        $dom->save('bibliographysitemapindex' . '.xml');
     }
 
 }
