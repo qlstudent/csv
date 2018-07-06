@@ -40,68 +40,6 @@
 class MyCSV
 {
     /** 
-     * Write to the database directly instead of writing to csv file 
-     * 
-     * @param array $locations array of locations as integers
-     * @param array $languages array of languages as integers
-     * @param array $dates     array of dates as integers (UNIX timestamps)
-     * @param \PDO  $pdo       pdo 
-     * 
-     * @return void return nothing 
-     */
-    static function writeToDatabase($locations, $languages, $dates, $pdo, $willDelete) 
-    {
-        foreach ($locations as &$location) {
-            $location = "/bib/" . $location;
-        }
-        $type = "custom";
-        $subtype = "";
-        $access = 1;
-        $status = 1;
-        $status_override = 0;
-        $priority = "0.5";
-        $priority_override = 0;
-        $changefreq = "86400";
-        $changecount = 0;
-        if ($willDelete) {
-            $deleteStatement = "delete from xmlsitemap where type = 'custom'";
-            $pdo->exec($deleteStatement);
-        }
-        $selectMaxId = "select max(id) as count from xmlsitemap where type = 'custom'";
-        $selectMaxId = $pdo->prepare($selectMaxId);
-        $selectMaxId->execute();
-        $countArray = $selectMaxId -> fetch(PDO::FETCH_ASSOC);
-        $count = $countArray['count'];
-        if (is_null($count)) { 
-            $id = 1;
-        } else { 
-            $id = $count;
-        }
-        foreach ($locations as $key=>$location) {
-            $language = MyCSV::getIso6391from6392($languages[$key]);
-            $lastmod = $dates[$key]; 
-            $stmt = $pdo->prepare(
-                "INSERT INTO XMLSITEMAP (`id`, `type`, `subtype`, `loc`, `language`, `access`, `status`, `status_override`, `lastmod`, `priority`, `priority_override`, `changefreq`, `changecount`) VALUES (:id, :type, :subtype, :loc, :language, :access, :status, :status_override, :lastmod, :priority, :priority_override, :changefreq, :changecount)"
-            );
-            $stmt->bindParam(':id', $id);
-            $stmt->bindParam(':type', $type);
-            $stmt->bindParam(':subtype', $subtype);
-            $stmt->bindParam(':loc', $location);
-            $stmt->bindParam(':language', $language);
-            $stmt->bindParam(':access', $access);
-            $stmt->bindParam(':status', $status);
-            $stmt->bindParam(':status_override', $status_override);
-            $stmt->bindParam(':lastmod', $lastmod);
-            $stmt->bindParam(':priority', $priority);
-            $stmt->bindParam(':priority_override', $priority_override);
-            $stmt->bindParam(':changefreq', $changefreq);
-            $stmt->bindParam(':changecount', $changecount);
-            $stmt->execute();
-            $id++;
-        }
-    }
-
-    /** 
      * Write the CSV 
      * 
      * @param array $locations array of locations as integers
@@ -272,8 +210,10 @@ class MyCSV
     /**
      * Returns an ISO 639-1 language code given an ISO 639-2 language code
      *
-     * This list is incomplete. 
-     * You can help by expanding it. 
+     * This list is incomplete.
+     * You can help by expanding it.
+     * Most of the items in the list are commented out.
+     * You should only uncomment those that you have in your Drupal installation
      *
      * @param string $key the key is a string like "en"  
      * 
