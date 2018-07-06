@@ -67,8 +67,6 @@ class MyCSV
             $dom->preserveWhiteSpace = false;
             $dom->formatOutput = true;
             $dom->loadXML($xml->asXML());
-            //Echo XML - remove this and following line if echo not desired
-            echo $dom->saveXML();
             //Save XML to file - remove this and following line if save not desired
             $dom->save('fileName' . $counter . '.xml');
         }
