@@ -39,6 +39,10 @@
  */
 class MyCSV
 {
+    /**
+     * @param $locations    array This is the location array, I expect strings
+     * @param $dates        array This is the dates array, I expect UNIX timestamps
+     */
     static function writeXMLSitemap($locations, $dates)
     {
         $baseUrl = "https://dev.qbpl.org";
