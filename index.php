@@ -23,24 +23,6 @@
 require 'drupal_function.php';
 
 
-$input = MyCSV::readInputFile("tinyinput.csv");
-//MyCSV::writeCSV($input[0], $input[1], $input[2]);
-
-$xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"/>');
-
-for ($i = 1; $i <= 3; ++$i) {
-    $url = $xml->addChild('url');
-    $url->addChild('loc', "song$i.mp3");
-    $url->addChild('changefreq', "weekly");
-    $url->addChild('priority', "1.0");
-}
-
-//Format XML to save indented tree rather than one line
-$dom = new DOMDocument('1.0');
-$dom->preserveWhiteSpace = false;
-$dom->formatOutput = true;
-$dom->loadXML($xml->asXML());
-//Echo XML - remove this and following line if echo not desired
-echo $dom->saveXML();
-//Save XML to file - remove this and following line if save not desired
-$dom->save('fileName.xml');
+$input = MyCSV::readInputFile("smallinput.csv");
+//$input = MyCSV::readInputFile("tinyinput.csv");
+MyCSV::doIt($input[0], $input[1], $input[2]);

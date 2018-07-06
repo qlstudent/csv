@@ -1,11 +1,11 @@
-<?php 
+<?php
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * Add custom URLs to XML Sitemap 
+ * Add custom URLs to XML Sitemap
  *
- * This is a companion for the XML Sitemap module. 
- * It makes it easier to add multiple URLs to the sitemap easily. 
+ * This is a companion for the XML Sitemap module.
+ * It makes it easier to add multiple URLs to the sitemap easily.
  *
  * PHP version 7
  *
@@ -14,12 +14,12 @@
  * @author     Original Author <author@example.com>
  * @author     Another Author <another@example.com>
  * @copyright  2018 Queens Library
- * @license    http://www.queenslibrary.org  
+ * @license    http://www.queenslibrary.org
  * @version    GIT: $Id$
  * @link       https://www.drupal.org/project/xmlsitemap
  * @see        XMLSitemap
  * @since      File available since May 2018
- * @deprecated Not deprecated 
+ * @deprecated Not deprecated
  */
 
 /**
@@ -30,25 +30,50 @@
  * @author     Original Author <author@example.com>
  * @author     Another Author <another@example.com>
  * @copyright  2018 Queens Library
- * @license    http://www.queenslibrary.org  
+ * @license    http://www.queenslibrary.org
  * @version    Release: @0.0.0@
  * @link       https://www.drupal.org/project/xmlsitemap
  * @see        DaVinci, Net_Sample::Net_Sample()
  * @since      File available since May 2018
- * @deprecated Not deprecated 
+ * @deprecated Not deprecated
  */
 class MyCSV
 {
-    /** 
-     * Write the CSV 
-     * 
+    static function doIt($locations, $languages, $dates)
+    {
+        $baseUrl = "https://dev.qbpl.org";
+        $extension = "/bib/";
+        $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"/>');
+        $priority = "0.5";
+        foreach ($locations as $key => $location) {
+            $lastmod = $dates[$key];
+            $url = $xml->addChild('url');
+            $url->addChild('loc', $baseUrl . $extension . (string)$location);
+            $url->addChild('lastmod', $lastmod);
+            $url->addChild('changefreq', "weekly");
+            $url->addChild('priority', "1.0");
+        }
+        //Format XML to save indented tree rather than one line
+        $dom = new DOMDocument($priority);
+        $dom->preserveWhiteSpace = false;
+        $dom->formatOutput = true;
+        $dom->loadXML($xml->asXML());
+        //Echo XML - remove this and following line if echo not desired
+        echo $dom->saveXML();
+        //Save XML to file - remove this and following line if save not desired
+        $dom->save('fileName.xml');
+    }
+
+    /**
+     * Write the CSV
+     *
      * @param array $locations array of locations as integers
      * @param array $languages array of languages as integers
-     * @param array $dates     array of dates as integers (UNIX timestamps)
-     * 
-     * @return void return nothing 
+     * @param array $dates array of dates as integers (UNIX timestamps)
+     *
+     * @return void return nothing
      */
-    static function writeCSV($locations, $languages, $dates) 
+    static function writeCSV($locations, $languages, $dates)
     {
         header('Content-Type: text/csv');
         header('Content-Disposition: attachment; filename="sitemap.csv"');
@@ -57,37 +82,37 @@ class MyCSV
         }
         $type = "custom";
         $subtype = "";
-        
+
         $access = 1;
         $status = 1;
         $status_override = 0;
-        
+
         $priority = "0.5";
         $priority_override = 0;
         $changefreq = "86400";
         $changecount = 0;
         $sravan = array();
-        foreach ($locations as $key=>$location) {
+        foreach ($locations as $key => $location) {
             $language = MyCSV::getIso6391from6392($languages[$key]);
-            $lastmod = $dates[$key]; 
+            $lastmod = $dates[$key];
             $randomID = MyCSV::getRandomID();
-            $sravan[] =  $randomID . "," . $type . "," . $subtype . "," . $location 
-            . "," . $language . "," . $access . "," . $status 
-            . "," . $status_override . "," . $lastmod . "," . $priority 
-            . "," . $priority_override . "," . $changefreq . "," . $changecount;
+            $sravan[] = $randomID . "," . $type . "," . $subtype . "," . $location
+                . "," . $language . "," . $access . "," . $status
+                . "," . $status_override . "," . $lastmod . "," . $priority
+                . "," . $priority_override . "," . $changefreq . "," . $changecount;
         }
 
         $fp = fopen('php://output', 'w');
         $columns = "id,type,subtype,location,language,access,status,status_override,"
-        . "lastmod,priority,priority_override,changefreq,changecount";
+            . "lastmod,priority,priority_override,changefreq,changecount";
         fputcsv(
-            $fp, 
+            $fp,
             explode(
-                ",", 
+                ",",
                 $columns
             )
         );
-        foreach ( $sravan as $line ) {
+        foreach ($sravan as $line) {
             $val = explode(",", $line);
             fputcsv($fp, $val);
         }
@@ -105,44 +130,43 @@ class MyCSV
     //     echo "query done";
     // }
 
-    /** 
+    /**
      * Get UNIX timestamp from input time
-     * 
+     *
      * @param string $stringDate input string e.g. "08/28/2014"
-     * 
+     *
      * @return int returns UNIX time stamp
      */
     static function getUnixTimestamp($stringDate)
-    {    
+    {
         return strtotime($stringDate);
     }
 
-    /** 
+    /**
      * Parse input csv file and return three arrays for further processing
-     * 
+     *
      * @param string $inputFileName input file (CSV)
-     * 
+     *
      * @return array returns 'csvform'
      */
-    static function readInputFile($inputFileName) 
+    static function readInputFile($inputFileName)
     {
         $row = 1;
         $locations = array();
         $languages = array();
         $dates = array();
-        $maxCSV = 800001;
         if (($handle = fopen($inputFileName, "r")) !== false) {
-            $fp = file($inputFileName, FILE_SKIP_EMPTY_LINES);
+            file($inputFileName, FILE_SKIP_EMPTY_LINES);
             // if (count($fp) > $maxCSV) {
             //     echo "This load of {count($fp)} is too big for me";
             //     die();
             // }
             // ignore the first line 
-            $data = fgetcsv($handle, 0, ",");
+            fgetcsv($handle, 0, ",");
             while (($data = fgetcsv($handle, 0, ",")) !== false) {
                 $num = count($data);
                 // echo "<p> $num fields in line $row: <br /></p>\n";
-                for ($c=0; $c < $num; $c++) {
+                for ($c = 0; $c < $num; $c++) {
                     // echo $data[$c] . "<br />\n";
                     if ($c == 0) {
                         array_push($locations, $data[$c]);
@@ -150,7 +174,7 @@ class MyCSV
                     if ($c == 1) {
                         array_push($languages, $data[$c]);
                     }
-                    if ($c == 2) { 
+                    if ($c == 2) {
                         array_push($dates, MyCSV::getUnixTimestamp($data[$c]));
                     }
                 }
@@ -168,18 +192,18 @@ class MyCSV
      * for all supported pltforms with fallback to an older,
      * less secure version.
      *
-     * @param bool $trim to trim or not to trim 
-     * 
+     * @param bool $trim to trim or not to trim
+     *
      * @return string
      */
     static function getRandomID($trim = true)
     {
         // Windows
         if (function_exists('com_create_guid') === true) {
-            if ($trim === true) { 
-                return trim(com_create_guid(), '{}');                
-            } else { 
-                return com_create_guid();                
+            if ($trim === true) {
+                return trim(com_create_guid(), '{}');
+            } else {
+                return com_create_guid();
             }
         }
 
@@ -197,13 +221,13 @@ class MyCSV
         $hyphen = chr(45);                  // "-"
         $lbrace = $trim ? "" : chr(123);    // "{"
         $rbrace = $trim ? "" : chr(125);    // "}"
-        $guidv4 = $lbrace.
-                substr($charid,  0,  8).$hyphen.
-                substr($charid,  8,  4).$hyphen.
-                substr($charid, 12,  4).$hyphen.
-                substr($charid, 16,  4).$hyphen.
-                substr($charid, 20, 12).
-                $rbrace;
+        $guidv4 = $lbrace .
+            substr($charid, 0, 8) . $hyphen .
+            substr($charid, 8, 4) . $hyphen .
+            substr($charid, 12, 4) . $hyphen .
+            substr($charid, 16, 4) . $hyphen .
+            substr($charid, 20, 12) .
+            $rbrace;
         return $guidv4;
     }
 
@@ -215,217 +239,217 @@ class MyCSV
      * Most of the items in the list are commented out.
      * You should only uncomment those that you have in your Drupal installation
      *
-     * @param string $key the key is a string like "en"  
-     * 
+     * @param string $key the key is a string like "en"
+     *
      * @return string
      */
     static function getIso6391from6392($key)
     {
         $languageCodes = [
-        //     "aar" => "aa",
-        //     "abk" => "ab",
-        //     "afr" => "af",
-        //     "aka" => "ak",
-        //     "alb" => "sq",
-        //     "amh" => "am",
-        //     "ara" => "ar",
-        //     "arg" => "an",
-        //     "arm" => "hy",
-        //     "asm" => "as",
-        //     "ava" => "av",
-        //     "ave" => "ae",
-        //     "aym" => "ay",
-        //     "aze" => "az",
-        //     "bak" => "ba",
-        //     "bam" => "bm",
-        //     "baq" => "eu",
-        //     "bel" => "be",
-        //     "ben" => "bn",
-        //     "bih" => "bh",
-        //     "bis" => "bi",
-        //     "tib" => "bo",
-        //     "bos" => "bs",
-        //     "bre" => "br",
-        //     "bul" => "bg",
-        //     "bur" => "my",
-        //     "cat" => "ca",
-        //     "cze" => "cs",
-        //     "cha" => "ch",
-        //     "che" => "ce",
-        //     "chi" => "zh",
-        //     "chu" => "cu",
-        //     "chv" => "cv",
-        //     "cor" => "kw",
-        //     "cos" => "co",
-        //     "cre" => "cr",
-        //     "wel" => "cy",
-        //     "cze" => "cs",
-        //     "dan" => "da",
-        //     "ger" => "de",
-        //     "div" => "dv",
-        //     "dut" => "nl",
-        //     "dzo" => "dz",
-        //     "gre" => "el",
-               "eng" => "en",
-        //     "epo" => "eo",
-        //     "est" => "et",
-        //     "baq" => "eu",
-        //     "ewe" => "ee",
-        //     "fao" => "fo",
-        //     "per" => "fa",
-        //     "fij" => "fj",
-        //     "fin" => "fi",
-        //     "fre" => "fr",
-        //     "fre" => "fr",
-        //     "fry" => "fy",
-        //     "ful" => "ff",
-        //     "geo" => "ka",
-        //     "ger" => "de",
-        //     "gla" => "gd",
-        //     "gle" => "ga",
-        //     "glg" => "gl",
-        //     "glv" => "gv",
-        //     "gre" => "el",
-        //     "grn" => "gn",
-        //     "guj" => "gu",
-        //     "hat" => "ht",
-        //     "hau" => "ha",
-        //     "heb" => "he",
-        //     "her" => "hz",
-        //     "hin" => "hi",
-        //     "hmo" => "ho",
-        //     "hrv" => "hr",
-        //     "hun" => "hu",
-        //     "arm" => "hy",
-        //     "ibo" => "ig",
-        //     "ice" => "is",
-        //     "ido" => "io",
-        //     "iii" => "ii",
-        //     "iku" => "iu",
-        //     "ile" => "ie",
-        //     "ina" => "ia",
-        //     "ind" => "id",
-        //     "ipk" => "ik",
-        //     "ice" => "is",
-        //     "ita" => "it",
-        //     "jav" => "jv",
-        //     "jpn" => "ja",
-        //     "kal" => "kl",
-        //     "kan" => "kn",
-        //     "kas" => "ks",
-        //     "geo" => "ka",
-        //     "kau" => "kr",
-        //     "kaz" => "kk",
-        //     "khm" => "km",
-        //     "kik" => "ki",
-        //     "kin" => "rw",
-        //     "kir" => "ky",
-        //     "kom" => "kv",
-        //     "kon" => "kg",
-        //     "kor" => "ko",
-        //     "kua" => "kj",
-        //     "kur" => "ku",
-        //     "lao" => "lo",
-        //     "lat" => "la",
-        //     "lav" => "lv",
-        //     "lim" => "li",
-        //     "lin" => "ln",
-        //     "lit" => "lt",
-        //     "ltz" => "lb",
-        //     "lub" => "lu",
-        //     "lug" => "lg",
-        //     "mac" => "mk",
-        //     "mah" => "mh",
-        //     "mal" => "ml",
-        //     "mao" => "mi",
-        //     "mar" => "mr",
-        //     "may" => "ms",
-        //     "mac" => "mk",
-        //     "mlg" => "mg",
-        //     "mlt" => "mt",
-        //     "mon" => "mn",
-        //     "mao" => "mi",
-        //     "may" => "ms",
-        //     "bur" => "my",
-        //     "nau" => "na",
-        //     "nav" => "nv",
-        //     "nbl" => "nr",
-        //     "nde" => "nd",
-        //     "ndo" => "ng",
-        //     "nep" => "ne",
-        //     "dut" => "nl",
-        //     "nno" => "nn",
-        //     "nob" => "nb",
-        //     "nor" => "no",
-        //     "nya" => "ny",
-        //     "oci" => "oc",
-        //     "oji" => "oj",
-        //     "ori" => "or",
-        //     "orm" => "om",
-        //     "oss" => "os",
-        //     "pan" => "pa",
-        //     "per" => "fa",
-        //     "pli" => "pi",
-        //     "pol" => "pl",
-        //     "por" => "pt",
-        //     "pus" => "ps",
-        //     "que" => "qu",
-        //     "roh" => "rm",
-        //     "rum" => "ro",
-        //     "rum" => "ro",
-        //     "run" => "rn",
-        //     "rus" => "ru",
-        //     "sag" => "sg",
-        //     "san" => "sa",
-        //     "sin" => "si",
-        //     "slo" => "sk",
-        //     "slo" => "sk",
-        //     "slv" => "sl",
-        //     "sme" => "se",
-        //     "smo" => "sm",
-        //     "sna" => "sn",
-        //     "snd" => "sd",
-        //     "som" => "so",
-        //     "sot" => "st",
-        //     "spa" => "es",
-        //     "alb" => "sq",
-        //     "srd" => "sc",
-        //     "srp" => "sr",
-        //     "ssw" => "ss",
-        //     "sun" => "su",
-        //     "swa" => "sw",
-        //     "swe" => "sv",
-        //     "tah" => "ty",
-        //     "tam" => "ta",
-        //     "tat" => "tt",
-        //     "tel" => "te",
-        //     "tgk" => "tg",
-        //     "tgl" => "tl",
-        //     "tha" => "th",
-        //     "tib" => "bo",
-        //     "tir" => "ti",
-        //     "ton" => "to",
-        //     "tsn" => "tn",
-        //     "tso" => "ts",
-        //     "tuk" => "tk",
-        //     "tur" => "tr",
-        //     "twi" => "tw",
-        //     "uig" => "ug",
-        //     "ukr" => "uk",
-        //     "urd" => "ur",
-        //     "uzb" => "uz",
-        //     "ven" => "ve",
-        //     "vie" => "vi",
-        //     "vol" => "vo",
-        //     "wel" => "cy",
-        //     "wln" => "wa",
-        //     "wol" => "wo",
-        //     "xho" => "xh",
-        //     "yid" => "yi",
-        //     "yor" => "yo",
-        //     "zha" => "za",
-        //     "chi" => "zh",
-        //     "zul" => "zu",
+            //     "aar" => "aa",
+            //     "abk" => "ab",
+            //     "afr" => "af",
+            //     "aka" => "ak",
+            //     "alb" => "sq",
+            //     "amh" => "am",
+            //     "ara" => "ar",
+            //     "arg" => "an",
+            //     "arm" => "hy",
+            //     "asm" => "as",
+            //     "ava" => "av",
+            //     "ave" => "ae",
+            //     "aym" => "ay",
+            //     "aze" => "az",
+            //     "bak" => "ba",
+            //     "bam" => "bm",
+            //     "baq" => "eu",
+            //     "bel" => "be",
+            //     "ben" => "bn",
+            //     "bih" => "bh",
+            //     "bis" => "bi",
+            //     "tib" => "bo",
+            //     "bos" => "bs",
+            //     "bre" => "br",
+            //     "bul" => "bg",
+            //     "bur" => "my",
+            //     "cat" => "ca",
+            //     "cze" => "cs",
+            //     "cha" => "ch",
+            //     "che" => "ce",
+            //     "chi" => "zh",
+            //     "chu" => "cu",
+            //     "chv" => "cv",
+            //     "cor" => "kw",
+            //     "cos" => "co",
+            //     "cre" => "cr",
+            //     "wel" => "cy",
+            //     "cze" => "cs",
+            //     "dan" => "da",
+            //     "ger" => "de",
+            //     "div" => "dv",
+            //     "dut" => "nl",
+            //     "dzo" => "dz",
+            //     "gre" => "el",
+            "eng" => "en",
+            //     "epo" => "eo",
+            //     "est" => "et",
+            //     "baq" => "eu",
+            //     "ewe" => "ee",
+            //     "fao" => "fo",
+            //     "per" => "fa",
+            //     "fij" => "fj",
+            //     "fin" => "fi",
+            //     "fre" => "fr",
+            //     "fre" => "fr",
+            //     "fry" => "fy",
+            //     "ful" => "ff",
+            //     "geo" => "ka",
+            //     "ger" => "de",
+            //     "gla" => "gd",
+            //     "gle" => "ga",
+            //     "glg" => "gl",
+            //     "glv" => "gv",
+            //     "gre" => "el",
+            //     "grn" => "gn",
+            //     "guj" => "gu",
+            //     "hat" => "ht",
+            //     "hau" => "ha",
+            //     "heb" => "he",
+            //     "her" => "hz",
+            //     "hin" => "hi",
+            //     "hmo" => "ho",
+            //     "hrv" => "hr",
+            //     "hun" => "hu",
+            //     "arm" => "hy",
+            //     "ibo" => "ig",
+            //     "ice" => "is",
+            //     "ido" => "io",
+            //     "iii" => "ii",
+            //     "iku" => "iu",
+            //     "ile" => "ie",
+            //     "ina" => "ia",
+            //     "ind" => "id",
+            //     "ipk" => "ik",
+            //     "ice" => "is",
+            //     "ita" => "it",
+            //     "jav" => "jv",
+            //     "jpn" => "ja",
+            //     "kal" => "kl",
+            //     "kan" => "kn",
+            //     "kas" => "ks",
+            //     "geo" => "ka",
+            //     "kau" => "kr",
+            //     "kaz" => "kk",
+            //     "khm" => "km",
+            //     "kik" => "ki",
+            //     "kin" => "rw",
+            //     "kir" => "ky",
+            //     "kom" => "kv",
+            //     "kon" => "kg",
+            //     "kor" => "ko",
+            //     "kua" => "kj",
+            //     "kur" => "ku",
+            //     "lao" => "lo",
+            //     "lat" => "la",
+            //     "lav" => "lv",
+            //     "lim" => "li",
+            //     "lin" => "ln",
+            //     "lit" => "lt",
+            //     "ltz" => "lb",
+            //     "lub" => "lu",
+            //     "lug" => "lg",
+            //     "mac" => "mk",
+            //     "mah" => "mh",
+            //     "mal" => "ml",
+            //     "mao" => "mi",
+            //     "mar" => "mr",
+            //     "may" => "ms",
+            //     "mac" => "mk",
+            //     "mlg" => "mg",
+            //     "mlt" => "mt",
+            //     "mon" => "mn",
+            //     "mao" => "mi",
+            //     "may" => "ms",
+            //     "bur" => "my",
+            //     "nau" => "na",
+            //     "nav" => "nv",
+            //     "nbl" => "nr",
+            //     "nde" => "nd",
+            //     "ndo" => "ng",
+            //     "nep" => "ne",
+            //     "dut" => "nl",
+            //     "nno" => "nn",
+            //     "nob" => "nb",
+            //     "nor" => "no",
+            //     "nya" => "ny",
+            //     "oci" => "oc",
+            //     "oji" => "oj",
+            //     "ori" => "or",
+            //     "orm" => "om",
+            //     "oss" => "os",
+            //     "pan" => "pa",
+            //     "per" => "fa",
+            //     "pli" => "pi",
+            //     "pol" => "pl",
+            //     "por" => "pt",
+            //     "pus" => "ps",
+            //     "que" => "qu",
+            //     "roh" => "rm",
+            //     "rum" => "ro",
+            //     "rum" => "ro",
+            //     "run" => "rn",
+            //     "rus" => "ru",
+            //     "sag" => "sg",
+            //     "san" => "sa",
+            //     "sin" => "si",
+            //     "slo" => "sk",
+            //     "slo" => "sk",
+            //     "slv" => "sl",
+            //     "sme" => "se",
+            //     "smo" => "sm",
+            //     "sna" => "sn",
+            //     "snd" => "sd",
+            //     "som" => "so",
+            //     "sot" => "st",
+            //     "spa" => "es",
+            //     "alb" => "sq",
+            //     "srd" => "sc",
+            //     "srp" => "sr",
+            //     "ssw" => "ss",
+            //     "sun" => "su",
+            //     "swa" => "sw",
+            //     "swe" => "sv",
+            //     "tah" => "ty",
+            //     "tam" => "ta",
+            //     "tat" => "tt",
+            //     "tel" => "te",
+            //     "tgk" => "tg",
+            //     "tgl" => "tl",
+            //     "tha" => "th",
+            //     "tib" => "bo",
+            //     "tir" => "ti",
+            //     "ton" => "to",
+            //     "tsn" => "tn",
+            //     "tso" => "ts",
+            //     "tuk" => "tk",
+            //     "tur" => "tr",
+            //     "twi" => "tw",
+            //     "uig" => "ug",
+            //     "ukr" => "uk",
+            //     "urd" => "ur",
+            //     "uzb" => "uz",
+            //     "ven" => "ve",
+            //     "vie" => "vi",
+            //     "vol" => "vo",
+            //     "wel" => "cy",
+            //     "wln" => "wa",
+            //     "wol" => "wo",
+            //     "xho" => "xh",
+            //     "yid" => "yi",
+            //     "yor" => "yo",
+            //     "zha" => "za",
+            //     "chi" => "zh",
+            //     "zul" => "zu",
             // // undecided 
             // "und" => "und",
             // // No linguistic content; Not applicable 
@@ -447,7 +471,7 @@ class MyCSV
         ];
         if (isset($languageCodes[$key])) {
             return $languageCodes[$key];
-        } else { 
+        } else {
             return "und";
         }
     }
