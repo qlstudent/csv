@@ -50,7 +50,7 @@ class MyCSV
         $priority = "0.5";
         $size = 50000;
         for ($counter = 0; $counter < ceil(count($locations) / $size); $counter++) {
-            $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"/>');
+            $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"/>');
             for ($i = 0; $i < $size; $i++) {
                 if ($i + $counter * $size > count($locations) - 1) {
                     break;
