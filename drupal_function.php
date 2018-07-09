@@ -43,7 +43,7 @@ class MyCSV
      * @param $locations    array This is the location array, I expect strings
      * @param $dates        array This is the dates array, I expect UNIX timestamps
      */
-    static function writeXMLSitemap($locations, $dates)
+    static function writeXMLSiteMap($locations, $dates)
     {
         $baseUrl = "https://www.queenslibrary.org";
         $extension = "/bib/";
@@ -69,7 +69,7 @@ class MyCSV
             //Save XML to file - remove this and following line if save not desired
             $dom->save('bibliographysitemap' . $counter . '.xml');
         }
-        self::writeXMLSitemapIndex($baseUrl, $counter);
+        self::writeXMLSiteMapIndex($baseUrl, $counter);
     }
 
     /**
@@ -486,14 +486,14 @@ class MyCSV
 
     /**
      * @param $baseUrl string this is the base url of the website
-     * @param $counter this is the number of sitemaps we assume we follow the same convention
+     * @param $counter int this is the number of sitemaps we assume we follow the same convention
      */
-    static function writeXMLSitemapIndex($baseUrl, $counter)
+    static function writeXMLSiteMapIndex($baseUrl, $counter)
     {
         $siteMapIndex = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"/>');
-        for($i = 0; $i < $counter; $i++) {
+        for ($i = 0; $i < $counter; $i++) {
             $siteMapIndexElement = $siteMapIndex->addChild('sitemap');
-            $siteMapIndexElement->addChild('loc', $baseUrl .'bibliographysitemap' . $i . '.xml');
+            $siteMapIndexElement->addChild('loc', $baseUrl . "/bibliographysitemap" . $i . ".xml");
             $siteMapIndexElement->addChild('lastmod', date('Y-m-dTh:m', time()));
         }
         //Format XML to save indented tree rather than one line
