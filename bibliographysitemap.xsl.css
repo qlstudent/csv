@@ -1,0 +1,7 @@
+table {
+    border: solid 1px #263238;
+}
+
+table:hover {
+    background-color: #B0BEC5;
+}

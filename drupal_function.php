@@ -45,12 +45,12 @@ class MyCSV
      */
     static function writeXMLSiteMap($locations, $dates)
     {
-        $baseUrl = "https://www.queenslibrary.org";
+        $baseUrl = "https://dev-liftrocket.pantheonsite.io";
         $extension = "/bib/";
         $priority = "0.5";
         $size = 50000;
         for ($counter = 0; $counter < ceil(count($locations) / $size); $counter++) {
-            $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"/>');
+            $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="bibliographysitemapstyle.xsl"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"/>');
             for ($i = 0; $i < $size; $i++) {
                 if ($i + $counter * $size > count($locations) - 1) {
                     break;
@@ -490,7 +490,7 @@ class MyCSV
      */
     static function writeXMLSiteMapIndex($baseUrl, $counter)
     {
-        $siteMapIndex = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"/>');
+        $siteMapIndex = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="bibliographysitemapstyle.xsl"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"/>');
         for ($i = 0; $i < $counter; $i++) {
             $siteMapIndexElement = $siteMapIndex->addChild('sitemap');
             $siteMapIndexElement->addChild('loc', $baseUrl . "/bibliographysitemap" . $i . ".xml");
