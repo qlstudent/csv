@@ -57,7 +57,7 @@ class MyCSV
                 }
                 $url = $xml->addChild('url');
                 $url->addChild('loc', $baseUrl . $extension . (string)$locations[$i + $counter * $size]);
-                $url->addChild('lastmod', date('Y-m-dTH:i:sP', $dates[$i + $counter * $size]));
+                $url->addChild('lastmod', date('Y-m-d', $dates[$i + $counter * $size]));
                 $url->addChild('changefreq', "weekly");
                 $url->addChild('priority', $priority);
             }
@@ -494,7 +494,7 @@ class MyCSV
         for ($i = 0; $i < $counter; $i++) {
             $siteMapIndexElement = $siteMapIndex->addChild('sitemap');
             $siteMapIndexElement->addChild('loc', $baseUrl . "/bibliographysitemap" . $i . ".xml");
-            $siteMapIndexElement->addChild('lastmod', date('Y-m-dTH:i:sP', time()));
+            $siteMapIndexElement->addChild('lastmod', date('Y-m-d', time()));
         }
         //Format XML to save indented tree rather than one line
         $dom = new DOMDocument();
