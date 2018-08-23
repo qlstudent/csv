@@ -1,0 +1,14 @@
+{
+  "name": "drupal/bibliographysitemap",
+  "type": "drupal-module",
+  "description": "Bibliography Sitemap allows you to manage your own sitemap xml and host it in drupal files",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/bibliographysitemap",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/bibliographysitemap",
+    "source": "http://cgit.drupalcode.org/bibliographysitemap"
+  },
+  "require": { }
+}

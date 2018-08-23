@@ -1,0 +1,7 @@
+bibliographysitemap.sitemap_controller_showSiteMapIndex:
+  path: '/bibliographysitemap.xml'
+  defaults:
+    _controller: '\Drupal\bibliographysitemap\Controller\SitemapController::showSiteMapIndex'
+    _title: 'ShowSitemapIndex'
+  requirements:
+    _permission: 'access content'

@@ -1,0 +1,5 @@
+name: 'Bibliography Sitemap'
+type: module
+description: 'Bibliography sitemap reads all the bibiography sitemaps in payload folder and displays them in your site slash bibliographysitemap.xml'
+core: 8.x
+package: 'Custom'

@@ -45,7 +45,7 @@ class MyCSV
      */
     static function writeXMLSiteMap($locations, $dates)
     {
-        $baseUrl = "https://dev-liftrocket.pantheonsite.io";
+        $baseUrl = "https://www.queenslibrary.org";
         $extension = "/bib/";
         $priority = "0.5";
         $size = 50000;

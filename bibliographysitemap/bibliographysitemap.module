@@ -1,0 +1,38 @@
+<?php
+
+/**
+ * @file
+ * Contains bibliographysitemap.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Symfony\Component\HttpFoundation\Response;
+/**
+ * Implements hook_help().
+ */
+function bibliographysitemap_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the bibliographysitemap module.
+    case 'help.page.bibliographysitemap':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Bibliography Sitemap allows you to manage your own sitemap xml and host it in drupal files') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function bibliographysitemap_theme() {
+  return [
+    'bibliographysitemap' => [
+      'render element' => 'children',
+      'variables' => ['test_var' => NULL],
+    ],
+  ];
+}
+
+
